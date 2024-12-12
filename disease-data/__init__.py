@@ -25,7 +25,7 @@ def test_load_data():
         try:
             actual_output = eval(output.strip())
         except Exception as e:
-            raise check50.Failure(f"Program output could not be parsed as a dictionary: {e}")
+            raise check50.Failure(f"Program output could not be parsed as a dictionary. Exception: {e} \nDid you remove all of your print statements?")
         
         # Compare the dictionaries directly
         if actual_output != expected_output:
@@ -47,7 +47,7 @@ def test_daily_cases():
         try:
             actual_output = eval(output.strip())
         except Exception as e:
-            raise check50.Failure(f"Program output could not be parsed as a dictionary: {e}")
+            raise check50.Failure(f"Program output could not be parsed as a dictionary. Exception: {e} \nDid you remove all of your print statements?")
         
         # Compare the dictionaries directly
         if actual_output != expected_output:
@@ -55,5 +55,10 @@ def test_daily_cases():
                 f"Expected {expected_output},\n but got {actual_output}"
             )
 
+
+# Test locally in a directory with data_analysis.py
+# check50 --dev ~/code/mrsharp-check50/disease-data
+
 # reference:
 # https://github.com/cs50/problems/blob/2022/python/meal/__init__.py
+# https://cs50.readthedocs.io/projects/check50/en/latest/check_writer/#check-writer
