@@ -1,7 +1,10 @@
 submit50:
   files: &submit50_files
     - !exclude "*"
-    - !include "*.py"
+    - !include "biasbars.py"
+    - !include "rating_stats.py"
+    - !include "biasbarsgui.py"
+    - !include "biasbarsdata.py"
     - !include "ethics.txt"
   style: false
   
