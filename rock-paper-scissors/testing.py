@@ -13,7 +13,7 @@ elif scenario == "computer_wins":
     # Round 1: tie, Round 2: computer win, Round 3: computer win
     computer_moves = ["rock", "paper", "scissors"]
 elif scenario == "tie_rounds":
-    # Round 1: tie, Round 2: tie, Round 3: player win
+    # tie, player win, (invalid), tie, computer win, tie, player wins match
     computer_moves = ["rock", "rock", "paper", "paper", "scissors", "scissors"]
 elif scenario == "invalid_input":
     # Use one move; test will send bad input first
