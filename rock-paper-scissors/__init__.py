@@ -13,18 +13,30 @@ def test_invalid_input():
     """rps.py reprompts when user enters invalid input"""
     run = check50.run("python3 testing.py invalid_input")
 
-    # send invalid move without waiting for prompt
+    # 1️⃣ Wait briefly for a prompt if one is printed separately
+    try:
+        run.expect("Choose rock, paper, or scissors", timeout=1)
+    except check50.Failure:
+        pass  # no visible prompt before input(), continue anyway
+
+    # 2️⃣ Send invalid input
     run.stdin("cat")
 
-    # then expect a message about invalid input or reprompt
-    run.stdout(regex("Invalid|try again"), regex=True)
+    # 3️⃣ Expect exact error message line
+    run.stdout("Invalid choice, try again.\n", "Invalid choice, try again.")
 
-    # then send a valid move to let the game continue
+    # 4️⃣ Expect the reprompt
+    run.stdout("Choose rock, paper, or scissors:", "Choose rock, paper, or scissors:")
+
+    # 5️⃣ Send valid move to continue
     run.stdin("rock")
-    run.stdout(regex("Computer chose"), regex=True)
-    run.stdout(regex("You|It's a tie|lose"), regex=True)
+
+    # 6️⃣ Expect computer’s move and a result line
+    run.stdout("Computer chose rock.", "Computer chose rock.")
+    run.stdout("It's a tie!\n", "It's a tie!")
 
     run.kill()
+
 
 
 
