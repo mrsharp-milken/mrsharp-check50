@@ -51,16 +51,25 @@ def test_player_wins():
 def test_computer_wins():
     """Computer wins a full best-of-3 game"""
     run = check50.run("python3 testing.py computer_wins")
+
     # Round 1: tie
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose rock"), regex=True)
-    run.stdout(regex("It's a tie!"), regex=True)
-    # Round 2: computer win
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose paper"), regex=True)
-    run.stdout(regex("You lose"), regex=True)
-    # Round 3: computer win, match ends
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose scissors"), regex=True)
-    run.stdout(regex("You lose"), regex=True)
-    run.stdout(regex("won the match"), regex=True).exit()
+    run.stdin("rock")
+    run.stdout("Computer chose rock.", "Expected computer’s move (round 1)")
+    run.stdout("It's a tie!\n", "Expected tie message (round 1)")
+
+    # Round 2: computer wins
+    run.stdin("rock")
+    run.stdout("Computer chose paper.", "Expected computer’s move (round 2)")
+    run.stdout("You lose this round!\n", "Expected loss message (round 2)")
+
+    # Round 3: computer wins again, match ends
+    run.stdin("paper")
+    run.stdout("Computer chose scissors.", "Expected computer’s move (round 3)")
+    run.stdout("You lose this round!\n", "Expected loss message (round 3)")
+    run.stdout("The computer won the match.", "Expected final match result")
+
+    run.exit(0)
+
 
 
 @check50.check(exists)
