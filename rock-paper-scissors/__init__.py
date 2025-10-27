@@ -13,30 +13,38 @@ def test_invalid_input():
     """rps.py reprompts when user enters invalid input"""
     run = check50.run("python3 testing.py invalid_input")
 
-    # 1️⃣ Try to send invalid input — don't wait for a prompt (handles both styles)
+    # Try to send invalid input — don't wait for a prompt (handles both styles)
     run.stdin("cat")
 
-    # 2️⃣ Expect the exact invalid message
+    # Expect the exact invalid message
     run.stdout("Invalid choice, try again.\n", "Invalid choice, try again.")
 
     run.kill()
-
 
 
 @check50.check(exists)
 def test_player_wins():
     """Player wins a full best-of-3 game"""
     run = check50.run("python3 testing.py player_wins")
+
     # Round 1: tie
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose rock"), regex=True)
-    run.stdout(regex("It's a tie!"), regex=True)
-    # Round 2: player win
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose scissors"), regex=True)
-    run.stdout(regex("You win"), regex=True)
-    # Round 3: player win, match ends
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose paper"), regex=True)
-    run.stdout(regex("You win"), regex=True)
-    run.stdout(regex("won the match"), regex=True).exit()
+    run.stdin("rock")  # don't wait for prompt — supports both input styles
+    run.stdout("Computer chose rock.", "Computer chose rock.")
+    run.stdout("It's a tie!\n", "It's a tie!")
+
+    # Round 2: player wins
+    run.stdin("rock")
+    run.stdout("Computer chose scissors.", "Computer chose scissors.")
+    run.stdout("You win this round!\n", "You win this round!")
+
+    # Round 3: player wins (match ends)
+    run.stdin("rock")
+    run.stdout("Computer chose paper.", "Computer chose paper.")
+    run.stdout("You win this round!\n", "You win this round!")
+    run.stdout("You won the match!", "You won the match!")
+
+    run.exit(0)
+
 
 
 @check50.check(exists)
