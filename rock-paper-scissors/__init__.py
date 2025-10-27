@@ -71,21 +71,50 @@ def test_computer_wins():
     run.exit(0)
 
 
-
 @check50.check(exists)
 def test_tie_rounds():
-    """Full game with multiple ties before a win"""
+    """Full game with multiple ties and an invalid input"""
     run = check50.run("python3 testing.py tie_rounds")
+
     # Round 1: tie
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose rock"), regex=True)
-    run.stdout(regex("It's a tie!"), regex=True)
-    # Round 2: tie
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose rock"), regex=True)
-    run.stdout(regex("It's a tie!"), regex=True)
-    # Round 3: player win, match ends
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose scissors"), regex=True)
-    run.stdout(regex("You win"), regex=True)
-    run.stdout(regex("won the match"), regex=True).exit()
+    run.stdin("rock")
+    run.stdout("Computer chose rock.", "Round 1: computer move")
+    run.stdout("It's a tie!\n", "Round 1: tie message")
+
+    # Round 2: player win
+    run.stdin("paper")
+    run.stdout("Computer chose rock.", "Round 2: computer move")
+    run.stdout("You win this round!\n", "Round 2: player win")
+
+    # Round 3: invalid input (not counted)
+    run.stdin("dog")
+    run.stdout("Invalid choice, try again.\n", "Round 3: invalid input message")
+    run.stdout("Choose rock, paper, or scissors:", "Round 3: reprompt")
+
+    # Round 3 retry: tie (this uses the same computer move as previous round 3)
+    run.stdin("paper")
+    run.stdout("Computer chose paper.", "Round 3 retry: computer move")
+    run.stdout("It's a tie!\n", "Round 3 retry: tie message")
+
+    # Round 4: computer win
+    run.stdin("rock")
+    run.stdout("Computer chose paper.", "Round 4: computer move")
+    run.stdout("You lose this round!\n", "Round 4: player loss")
+
+    # Round 5: tie
+    run.stdin("scissors")
+    run.stdout("Computer chose scissors.", "Round 5: computer move")
+    run.stdout("It's a tie!\n", "Round 5: tie message")
+
+    # Round 6: player win (match ends)
+    run.stdin("rock")
+    run.stdout("Computer chose scissors.", "Round 6: computer move")
+    run.stdout("You win this round!\n", "Round 6: player win")
+    run.stdout("You won the match!", "Final match result")
+
+    run.exit(0)
+
+
 
 
 def regex(text):
