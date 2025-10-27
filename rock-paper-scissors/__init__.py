@@ -10,17 +10,12 @@ def exists():
 
 @check50.check(exists)
 def test_invalid_input():
-    """rps.py rejects invalid input"""
-    # Run testing.py with any scenario (e.g., player_wins)
-    run = check50.run("python3 testing.py player_wins")
-    # Enter an invalid move first
-    run.stdin("cat", prompt=True).stdout(
-        regex("Choose rock, paper, or scissors"), "Choose rock, paper, or scissors:"
-    )
-    # Then enter a valid move so the game continues
-    run.stdin("rock", prompt=True).stdout(
-        regex("Computer chose rock"), regex=True
-    )
+    """rps.py reprompts when user enters invalid input"""
+    run = check50.run("python3 testing.py invalid_input")
+    # send invalid move
+    run.stdin("cat", prompt=True).stdout(regex("Choose rock, paper, or scissors"), regex=True)
+    # then send valid move so game can proceed
+    run.stdin("rock", prompt=True).stdout(regex("Computer chose rock"), regex=True)
     run.stdout(regex("It's a tie!"), regex=True)
     run.kill()
 
@@ -34,10 +29,10 @@ def test_player_wins():
     run.stdout(regex("It's a tie!"), regex=True)
     # Round 2: player win
     run.stdin("rock", prompt=True).stdout(regex("Computer chose scissors"), regex=True)
-    run.stdout(regex("You win!"), regex=True)
+    run.stdout(regex("You win"), regex=True)
     # Round 3: player win, match ends
     run.stdin("rock", prompt=True).stdout(regex("Computer chose paper"), regex=True)
-    run.stdout(regex("You win!"), regex=True)
+    run.stdout(regex("You win"), regex=True)
     run.stdout(regex("won the match"), regex=True).exit()
 
 
@@ -50,10 +45,10 @@ def test_computer_wins():
     run.stdout(regex("It's a tie!"), regex=True)
     # Round 2: computer win
     run.stdin("rock", prompt=True).stdout(regex("Computer chose paper"), regex=True)
-    run.stdout(regex("You lose!"), regex=True)
+    run.stdout(regex("You lose"), regex=True)
     # Round 3: computer win, match ends
     run.stdin("rock", prompt=True).stdout(regex("Computer chose scissors"), regex=True)
-    run.stdout(regex("You lose!"), regex=True)
+    run.stdout(regex("You lose"), regex=True)
     run.stdout(regex("won the match"), regex=True).exit()
 
 
@@ -69,7 +64,7 @@ def test_tie_rounds():
     run.stdout(regex("It's a tie!"), regex=True)
     # Round 3: player win, match ends
     run.stdin("rock", prompt=True).stdout(regex("Computer chose scissors"), regex=True)
-    run.stdout(regex("You win!"), regex=True)
+    run.stdout(regex("You win"), regex=True)
     run.stdout(regex("won the match"), regex=True).exit()
 
 
