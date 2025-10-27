@@ -38,7 +38,7 @@ def test_player_wins():
     run.stdout("You win this round!\n", "You win this round!")
 
     # Round 3: player wins (match ends)
-    run.stdin("rock")
+    run.stdin("scissors")
     run.stdout("Computer chose paper.", "Computer chose paper.")
     run.stdout("You win this round!\n", "You win this round!")
     run.stdout("You won the match!", "You won the match!")
