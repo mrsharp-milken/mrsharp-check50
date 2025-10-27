@@ -5,7 +5,6 @@ from re import escape
 def exists():
     """rps.py exists"""
     check50.exists("rps.py")
-    # Include testing.py so we can monkey-patch randint
     check50.include("testing.py")
 
 
@@ -18,38 +17,28 @@ def test_invalid_input():
 
 
 @check50.check(exists)
-def test_valid_move():
-    """rps.py accepts a valid move and prints a round result"""
-    check50.run("python3 testing.py").stdin("rock", prompt=True).stdout(
-        regex("Computer chose"), "Computer chose", regex=True
-    ).kill()
+def test_full_game():
+    """rps.py correctly plays a best-of-3 game with tie, player win, and computer win"""
+    # Player inputs designed to test the sequence:
+    # Round 1: tie → player inputs "rock"
+    # Round 2: player win → player inputs "rock"
+    # Round 3: computer win → player inputs "rock"
+    inputs = ["rock", "rock", "rock"]
 
+    run = check50.run("python3 testing.py")
+    for i in inputs:
+        run.stdin(i, prompt=True)
 
-@check50.check(test_valid_move)
-def test_player_win():
-    """rps.py outputs 'You win!' when player wins"""
-    # Our monkey-patched randint returns 3 (scissors)
-    check50.run("python3 testing.py").stdin("rock", prompt=True).stdout(
-        regex("You win!"), "You win!", regex=True
-    ).exit()
+    # Check outputs for each round
+    run.stdout(regex("Computer chose rock"), "Computer chose rock", regex=True)
+    run.stdout(regex("It's a tie!"), "It's a tie!", regex=True)
+    run.stdout(regex("Computer chose scissors"), "Computer chose scissors", regex=True)
+    run.stdout(regex("You win!"), "You win!", regex=True)
+    run.stdout(regex("Computer chose paper"), "Computer chose paper", regex=True)
+    run.stdout(regex("You lose!"), "You lose!", regex=True)
 
-
-@check50.check(test_valid_move)
-def test_player_loss():
-    """rps.py outputs 'You lose!' when player loses"""
-    # Monkey-patched randint returns 1 (rock)
-    check50.run("python3 testing.py").stdin("scissors", prompt=True).stdout(
-        regex("You lose!"), "You lose!", regex=True
-    ).exit()
-
-
-@check50.check(test_valid_move)
-def test_tie():
-    """rps.py outputs 'It's a tie!' when moves are equal"""
-    # Monkey-patched randint returns 2 (paper)
-    check50.run("python3 testing.py").stdin("paper", prompt=True).stdout(
-        regex("It's a tie!"), "It's a tie!", regex=True
-    ).exit()
+    # Check that the final match ends
+    run.stdout(regex("won the match"), "won the match", regex=True).exit()
 
 
 def regex(text):
