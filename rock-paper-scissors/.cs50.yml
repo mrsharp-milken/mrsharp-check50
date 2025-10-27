@@ -1,7 +1,7 @@
 submit50:
   files: &submit50_files
     - !exclude "*"
-    - !require game.py
+    - !require rps.py
   style: false
   
 check50:
