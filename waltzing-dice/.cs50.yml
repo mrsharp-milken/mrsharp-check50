@@ -1,7 +1,7 @@
 check50: 
   files: &check50_files
     - !exclude "*"
-    - !require waltzing-dice.py
+    - !require waltzing_dice.py
 
 submit50:
   files: *check50_files
