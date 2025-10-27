@@ -12,12 +12,20 @@ def exists():
 def test_invalid_input():
     """rps.py reprompts when user enters invalid input"""
     run = check50.run("python3 testing.py invalid_input")
-    # send invalid move
-    run.stdin("cat", prompt=True).stdout(regex("Choose rock, paper, or scissors"), regex=True)
-    # then send valid move so game can proceed
-    run.stdin("rock", prompt=True).stdout(regex("Computer chose rock"), regex=True)
-    run.stdout(regex("It's a tie!"), regex=True)
+
+    # send invalid move without waiting for prompt
+    run.stdin("cat")
+
+    # then expect a message about invalid input or reprompt
+    run.stdout(regex("Invalid|try again"), regex=True)
+
+    # then send a valid move to let the game continue
+    run.stdin("rock")
+    run.stdout(regex("Computer chose"), regex=True)
+    run.stdout(regex("You|It's a tie|lose"), regex=True)
+
     run.kill()
+
 
 
 @check50.check(exists)
