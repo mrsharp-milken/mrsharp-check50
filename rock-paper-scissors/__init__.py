@@ -10,7 +10,7 @@ def exists():
 @check50.check()
 def exists():
     """RPS blob exists - Check instructions for new additonal command"""
-    check50.exists(".rps-ansi.blob")
+    check50.exists(".rps-ansi.txt")
 
 @check50.check(exists)
 def test_invalid_input():
