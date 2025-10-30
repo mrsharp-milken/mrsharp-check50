@@ -2,6 +2,7 @@ submit50:
   files: &submit50_files
     - !exclude "*"
     - !require rps.py
+    - !require .rps-ansi.blob
   style: false
   
 check50:
